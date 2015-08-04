@@ -12,6 +12,7 @@
 
 var {EventEmitter} = require('events');
 var assign = require('object-assign');
+var invariant = require('../frontend/invariant');
 
 import type {RendererID, DataType, OpaqueNodeHandle, NativeType, Helpers} from '../backend/types';
 
@@ -235,6 +236,8 @@ class Agent extends EventEmitter {
       return null;
     }
     var renderer = this.renderers.get(id);
+    invariant(renderer, 'An element %s has no renderer');
+    invariant(this.reactInternals[renderer], 'A renderer is not found: %s', renderer);
     if (this.reactInternals[renderer].getNativeFromReactElement) {
       // $FlowFixMe I literally just checked this
       return this.reactInternals[renderer].getNativeFromReactElement(component);
